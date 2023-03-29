@@ -1,0 +1,7 @@
+.main_box{
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    padding: auto;
+}
+
