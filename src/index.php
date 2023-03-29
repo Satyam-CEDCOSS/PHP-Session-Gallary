@@ -1,9 +1,11 @@
 <?php
+// Session start 
 session_start();
 if (!isset($_SESSION["path"])){
     $_SESSION["path"] = array();
 }
 ?>
+<!-- HTML Template -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,20 +18,24 @@ if (!isset($_SESSION["path"])){
 </head>
 
 <body>
+    <!-- HTML FORM  -->
     <h1>Image Gallary</h1>
     <p>This page Display the list of uploaded images.</p>
     <form action="#" method="post" enctype="multipart/form-data">
         <input type="file" name="fileToUpload" accept="image/*"/><br>
+        <!-- USE BUTTON TO INITIALISE CONDITION  -->
         <input type="submit" value="Submit" name="submit">
     </form>
     
+    <!-- PHP FILE UPLOAD  -->
+
     <?php
     $target_dir = "./image/";
     $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
-
+    // CHECK FILE CONDITION
     if(isset($_GET["submit"])) {
       $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
       if($check !== false) {
@@ -40,26 +46,29 @@ if (!isset($_SESSION["path"])){
         $uploadOk = 0;
       }
     }
+    // file already exists CONDITION 
     if (file_exists($target_file)) {
         echo "Sorry, file already exists.";
         $uploadOk = 0;
     }
-    if ($_FILES["fileToUpload"]["size"] > 2097152) {
+    // SIZE LESS THAN 5 MB CONDITION
+    if ($_FILES["fileToUpload"]["size"] > 5097152) {
       echo "Sorry, your file is too large.<br>";
       $uploadOk = 0;
     }
+    // FILE SHOULD BE IMAGE CONDITION 
     if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
     && $imageFileType != "gif" ) {
       echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
       $uploadOk = 0;
     }
+    // FILE UPLOAD CONDITION
     if ($uploadOk == 0) {
       echo "Sorry, your file was not uploaded.<br>";
     } else {
       if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.<br>";
+        echo "The file has been uploaded.<br>";
         array_push($_SESSION["path"],$_FILES["fileToUpload"]["name"]);
-        // session_unset();
       } else {
         echo "Sorry, there was an error uploading your file.<br>";
       }
